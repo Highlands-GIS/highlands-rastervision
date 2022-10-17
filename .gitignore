@@ -1,0 +1,9 @@
+input
+output
+processed
+train
+code/tiny_spacenet.py
+code/isprs_potsdam.py
+code/isprs_potsdam_multi_source.py
+.idea
+.DS_Store
