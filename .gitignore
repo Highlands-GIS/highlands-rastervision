@@ -1,10 +1,7 @@
-input
-output
+input/*.tif*
+input/*.qmd
+output/
 processed
-train
-code/tiny_spacenet.py
-code/isprs_potsdam.py
-code/isprs_potsdam_multi_source.py
 .idea
 .DS_Store
 __pycache__
