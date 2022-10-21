@@ -1,5 +1,8 @@
 # flake8: noqa
 
+# based off https://github.com/azavea/raster-vision/blob/master/rastervision_pytorch_backend/rastervision/pytorch_backend/examples/semantic_segmentation/isprs_potsdam.py
+
+
 import os
 from os.path import join, basename
 
@@ -128,7 +131,7 @@ def get_config(runner,
         raster_source = RasterioSourceConfig(
             uris=[raster_uri], channel_order=channel_order)
         vector_source = GeoJSONVectorSourceConfig(
-            uri=label_uri, default_class_id=0, ignore_crs_field=True)
+            uri=label_uri, default_class_id=1, ignore_crs_field=True)
 
         # Using with_rgb_class_map because label TIFFs have classes encoded as
         # RGB colors.
@@ -157,7 +160,7 @@ def get_config(runner,
         train_scenes=[make_scene(id) for id in train_ids],
         validation_scenes=[make_scene(id) for id in val_ids])
 
-    chip_sz = 256
+    chip_sz = 300
     img_sz = chip_sz
 
     chip_options = SemanticSegmentationChipOptions(
@@ -218,7 +221,7 @@ def get_config(runner,
     backend = PyTorchSemanticSegmentationConfig(
         data=data,
         model=model,
-        solver=SolverConfig(lr=1e-4, num_epochs=1, batch_sz=2),
+        solver=SolverConfig(lr=1e-4, num_epochs=10, batch_sz=8, one_cycle=True),
         log_tensorboard=True,
         run_tensorboard=False,
         test_mode=test)
