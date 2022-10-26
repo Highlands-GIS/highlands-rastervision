@@ -23,10 +23,10 @@ TRAIN_IDS = ['G6A14']
 VAL_IDS = ['G6A14']
 
 CLASS_NAMES = [
-    'impervious', 'vegetation', 'water'
+    'impervious', 'vegetation', 'water', 'background'
 ]
 CLASS_COLORS = [
-    'red', 'green', 'blue'
+    'red', 'green', 'blue', 'black'
 ]
 
 
@@ -131,14 +131,14 @@ def get_config(runner,
         raster_source = RasterioSourceConfig(
             uris=[raster_uri], channel_order=channel_order)
         vector_source = GeoJSONVectorSourceConfig(
-            uri=label_uri, default_class_id=1, ignore_crs_field=True)
+            uri=label_uri, default_class_id=3, ignore_crs_field=True)
 
         # Using with_rgb_class_map because label TIFFs have classes encoded as
         # RGB colors.
         label_source = SemanticSegmentationLabelSourceConfig(
             raster_source=RasterizedSourceConfig(
                 vector_source=vector_source,
-                rasterizer_config=RasterizerConfig(background_class_id=1)))
+                rasterizer_config=RasterizerConfig(background_class_id=3)))
 
         # URI will be injected by scene config.
         # Using rgb=True because we want prediction TIFFs to be in
