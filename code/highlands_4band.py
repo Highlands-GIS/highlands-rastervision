@@ -23,10 +23,10 @@ TRAIN_IDS = ['G6A14']
 VAL_IDS = ['G6A14']
 
 CLASS_NAMES = [
-    'impervious', 'vegetation', 'water', 'background'
+    'impervious', 'vegetation', 'water', 'background', 'default'
 ]
 CLASS_COLORS = [
-    'red', 'green', 'blue', 'black'
+    'red', 'green', 'blue', 'black', 'grey'
 ]
 
 
@@ -131,7 +131,7 @@ def get_config(runner,
         raster_source = RasterioSourceConfig(
             uris=[raster_uri], channel_order=channel_order)
         vector_source = GeoJSONVectorSourceConfig(
-            uri=label_uri, default_class_id=3, ignore_crs_field=True)
+            uri=label_uri, default_class_id=4, ignore_crs_field=True)
 
         # Using with_rgb_class_map because label TIFFs have classes encoded as
         # RGB colors.
