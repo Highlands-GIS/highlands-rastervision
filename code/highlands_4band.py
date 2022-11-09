@@ -113,7 +113,7 @@ def get_config(runner,
         # label_uri = f'{raw_uri}/5_Labels_for_participants/top_potsdam_{id}_label.tif'
 
         raster_uri = f'{raw_uri}/{id}.tif'
-        label_uri = f'{raw_uri}/{id}_impervious_labels_2.geojson'
+        label_uri = f'{raw_uri}/{id}_labels.geojson'
 
         if test:
             crop_uri = join(processed_uri, 'crops', basename(raster_uri))
