@@ -18,9 +18,12 @@ from rastervision.pytorch_backend.examples.semantic_segmentation.utils import (
     example_multiband_transform, example_rgb_transform, imagenet_stats,
     Unnormalize)
 
-TRAIN_IDS = ['G6A14']
+TRAIN_IDS = ['G6A14', 'E7D1', 'F6B8']
 
-VAL_IDS = ['G6A14']
+VAL_IDS = TRAIN_IDS
+
+
+# VAL_IDS = ['G5B8', 'H4C14', 'F5B12']
 
 CLASS_NAMES = [
     'impervious', 'background'
@@ -161,7 +164,7 @@ def get_config(runner,
         train_scenes=[make_scene(id) for id in train_ids],
         validation_scenes=[make_scene(id) for id in val_ids])
 
-    chip_sz = 300
+    chip_sz = 250
     img_sz = chip_sz
 
     chip_options = SemanticSegmentationChipOptions(
