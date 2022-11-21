@@ -134,7 +134,7 @@ def get_config(runner,
         raster_source = RasterioSourceConfig(
             uris=[raster_uri], channel_order=channel_order)
         vector_source = GeoJSONVectorSourceConfig(
-        default_class_id=0,
+            default_class_id=0,
             uri=label_uri, ignore_crs_field=True)
 
         # Using with_rgb_class_map because label TIFFs have classes encoded as
@@ -192,7 +192,7 @@ def get_config(runner,
             img_sz=img_sz,
             img_channels=len(channel_order),
             num_workers=0,
-            channel_display_groups=channel_display_groups,
+            # channel_display_groups=channel_display_groups,
             base_transform=base_transform,
             aug_transform=aug_transform,
             plot_options=PlotOptions(transform=plot_transform))
@@ -200,7 +200,7 @@ def get_config(runner,
         data = SemanticSegmentationImageDataConfig(
             img_sz=img_sz,
             num_workers=0,
-            channel_display_groups=channel_display_groups,
+            # channel_display_groups=channel_display_groups,
             base_transform=base_transform,
             aug_transform=aug_transform,
             plot_options=PlotOptions(transform=plot_transform))
@@ -225,7 +225,7 @@ def get_config(runner,
     backend = PyTorchSemanticSegmentationConfig(
         data=data,
         model=model,
-        solver=SolverConfig(lr=1e-4, num_epochs=5, batch_sz=8, one_cycle=True),
+        solver=SolverConfig(lr=1e-4, num_epochs=15, batch_sz=8, one_cycle=True),
         log_tensorboard=True,
         run_tensorboard=False,
         test_mode=test)
@@ -234,7 +234,7 @@ def get_config(runner,
         root_uri=root_uri,
         dataset=scene_dataset,
         backend=backend,
-        channel_display_groups=channel_display_groups,
+        # channel_display_groups=channel_display_groups,
         train_chip_sz=chip_sz,
         predict_chip_sz=chip_sz,
         chip_options=chip_options)
