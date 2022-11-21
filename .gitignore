@@ -1,7 +1,7 @@
-input/*.tif*
-input/*.qmd
+input/
 output/
-processed
+progress
 .idea
 .DS_Store
 __pycache__
+.env
