@@ -1,0 +1,27 @@
+{
+    "ImageId": "ami-087c17d1fe0178315",
+    "KeyName": "carto-concepts",
+    "SecurityGroupIds": [
+        "sg-04d29f074a492a629"
+    ],
+    "InstanceType": "t3.large",
+    "Placement": {
+        "AvailabilityZone": "us-east-1a"
+    },
+    "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::434872238534:instance-profile/ImperviousSurface"
+    },
+    "BlockDeviceMappings": [
+        {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+                "DeleteOnTermination": true,
+                "SnapshotId": "snap-0699a041095ac5492",
+                "VolumeSize": 20,
+                "VolumeType": "gp3",
+                "Encrypted": false
+            }
+        }
+    ],
+    "UserData": "IyEvYmluL2Jhc2gKc2V0IC1lCgojIGluc3RhbGwgZG9ja2VyIGRlcHMKc3VkbyB5dW0gdXBkYXRlIC15CnN1ZG8geXVtIGluc3RhbGwgLXkgZG9ja2VyCnN1ZG8gc3lzdGVtY3RsIHN0YXJ0IGRvY2tlcgoKY2QgL2hvbWUvZWMyLXVzZXIgfHwgZXhpdApzdWRvIG1rZGlyICJkYXRhIgoKUk9PVF9QQVRIPXMzOi8vbmpoaWdobGFuZHMvZ2VvYmlhL2ltcGVydmlvdXMvMjAyMApQR19VU0VSPSdwb3N0Z3JlcycKUEdfUEFTUz0ncGFzc3dvcmQnCgpzdWRvIGRvY2tlciBydW4gLS1uYW1lIHBvc3RnaXMgLWQgLXAgNTQzMjo1NDMyIC1lIFBPU1RHUkVTX1VTRVI9JFBHX1VTRVIgLWUgUE9TVEdSRVNfUEFTU1dPUkQ9JFBHX1BBU1MgcG9zdGdpcy9wb3N0Z2lzOjE1LTMuMwpzbGVlcCA1CgpQR19DT05UQUlORVJfSVA9JChzdWRvIGRvY2tlciBpbnNwZWN0IC0tZm9ybWF0ICd7eyAuTmV0d29ya1NldHRpbmdzLklQQWRkcmVzcyB9fScgcG9zdGdpcykKCmF3cyBzMyBscyAiJHtST09UX1BBVEh9L3ByZWRpY3RlZC8iIHwgd2hpbGUgcmVhZCBmaWxlOyBkbwogIGl0ZW1zPSgkZmlsZSkKICB0YXJnZXQ9JHtpdGVtc1sxXX0KICBlY2hvICR0YXJnZXQKICBhd3MgczMgY3AgIiR7Uk9PVF9QQVRIfS9wcmVkaWN0ZWQvJHt0YXJnZXR9MC1wb2x5Z29ucy5qc29uIiAuL2RhdGEvcG9seWdvbnMuZ2VvanNvbgogIHN1ZG8gZG9ja2VyIHJ1biAtdiAiJChwd2QpL2RhdGE6L2RhdGEiIC0tbmFtZSBnZGFsIC0tcm0gb3NnZW8vZ2RhbDphbHBpbmUtc21hbGwtbGF0ZXN0IG9ncjJvZ3IgLXByb2dyZXNzIC1mICJQb3N0Z3JlU1FMIiBQRzoiaG9zdD0ke1BHX0NPTlRBSU5FUl9JUH0gZGJuYW1lPXBvc3RncmVzIHVzZXI9JFBHX1VTRVIgcGFzc3dvcmQ9JFBHX1BBU1MiICIvZGF0YS9wb2x5Z29ucy5nZW9qc29uIiAtbmxuIHByZWRpY3RlZCAtYXBwZW5kCmRvbmUKCnN1ZG8gZG9ja2VyIHJ1biAtdiAiJChwd2QpL2RhdGE6L2RhdGEiIC0tbmFtZSBnZGFsIC0tcm0gb3NnZW8vZ2RhbDphbHBpbmUtc21hbGwtbGF0ZXN0IG9ncjJvZ3IgLXByb2dyZXNzIC1mICJHUEtHIiAvZGF0YS9wcmVkaWN0ZWQuZ3BrZyBQRzoiaG9zdD0ke1BHX0NPTlRBSU5FUl9JUH0gZGJuYW1lPXBvc3RncmVzIHVzZXI9JFBHX1VTRVIgcGFzc3dvcmQ9JFBHX1BBU1MiIC1ubG4gcHJlZGljdGVkIC1zcWwgIlNFTEVDVCAqIEZST00gcHJlZGljdGVkIgoKYXdzIHMzIGNwICIkKHB3ZCkvZGF0YS9wcmVkaWN0ZWQuZ3BrZyIgIiR7Uk9PVF9QQVRIfS9wcmVkaWN0ZWQuZ3BrZyIKCiMgc2h1dGRvd24gdGhlIGVjMiBvbiBjb21wbGV0aW9uCnN1ZG8gc2h1dGRvd24gbm93Cg=="
+}
