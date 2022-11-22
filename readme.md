@@ -51,7 +51,6 @@ docker run -t -i --rm \
 The AWS prediction is run on EC2 Spot instances and output prediction are written to an s3 bucket. 
 Once all grids have been processed, a seperate process is ran to aggregate all grids into a single geopackage. 
 See the /aws directory for how this is setup.  
-openssl base64 -A -in ./aws/predict/userdata.sh -out ./aws/predict/userdata.txt
 
 1. copy the required files to aws
     ```shell
@@ -72,7 +71,7 @@ openssl base64 -A -in ./aws/predict/userdata.sh -out ./aws/predict/userdata.txt
     ```
    If the process fails, the EC2 instance will automatically terminate. 
 
-5. Check prediction progress by monitoring the object count in the target s3 path
+5. Check prediction progress by monitoring the object count in the target s3 path. There should be about **1900** objects when completed. 
     ```shell
     aws s3 ls s3://njhighlands/geobia/impervious/2020/predicted/ | wc -l 
     ```
