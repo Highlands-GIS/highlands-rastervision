@@ -1,6 +1,6 @@
 
 # Highlands Rastervision
-4 band semantic segmentation using [RasterVision](https://rastervision.io/). 
+4 band semantic segmentation using [RasterVision](https://rastervision.io/) ([pdf](https://buildmedia.readthedocs.org/media/pdf/raster-vision/latest/raster-vision.pdf)). 
 
 ## Getting Started
 ### Prepare data
