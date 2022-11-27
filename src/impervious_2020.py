@@ -1,9 +1,4 @@
 # flake8: noqa
-
-# based off https://github.com/azavea/raster-vision/blob/master/rastervision_pytorch_backend/rastervision/pytorch_backend/examples/semantic_segmentation/isprs_potsdam.py
-
-
-import os
 from os.path import join, basename
 
 from rastervision.core.rv_pipeline import *
@@ -18,25 +13,28 @@ from rastervision.pytorch_backend.examples.semantic_segmentation.utils import (
     example_multiband_transform, example_rgb_transform, imagenet_stats,
     Unnormalize)
 
-TRAIN_IDS = ['G6A14', 'E7D1', 'F6B8']
+TRAIN_IDS = ['G6A14', 'E7D1', 'F6B8', 'E6B11', 'I3D16', 'J3A9']
 
-VAL_IDS = TRAIN_IDS
+VAL_IDS = ['H7B5', 'I6A6']
 
+NUM_WORKERS = 8
 
-# VAL_IDS = ['G5B8', 'H4C14', 'F5B12']
+NUM_EPOCHS = 20
 
 CLASS_NAMES = [
     'impervious', 'background'
 ]
+
 CLASS_COLORS = [
     'orange', 'black'
 ]
 
 
 def get_config(runner,
-               raw_uri: str = '/opt/data/input',
+               raw_uri: str = 's3://njogis-imagery/2020/cog',
+               raw_label_uri: str = 's3://njhighlands/geobia/impervious/2020/labels',
                processed_uri: str = '/opt/data/processed',
-               root_uri: str = '/opt/data/output',
+               root_uri: str = '/opt/data/train', #'s3://njhighlands/geobia/impervious/2020/train',
                multiband: bool = True,
                external_model: bool = False,
                augment: bool = False,
@@ -50,6 +48,7 @@ def get_config(runner,
         raw_uri (str): Directory where the raw data resides
         processed_uri (str): Directory for storing processed data.
                              E.g. crops for testing.
+        raw_label_uri (str): directory where the lables are.
         root_uri (str): Directory where all the output will be written.
         multiband (bool, optional): If True, all 4 channels (R, G, B, & IR)
             available in the raster source will be used. If False, only
@@ -84,7 +83,7 @@ def get_config(runner,
     if multiband:
         # use all 4 channels
         channel_order = [0, 1, 2, 3]
-        channel_display_groups = {'RGB': (0, 1, 2), 'IR': (3, )}
+        channel_display_groups = {'RGB': (0, 1, 2), 'IR': (3,)}
         aug_transform = example_multiband_transform
     else:
         # use infrared, red, & green channels only
@@ -108,15 +107,13 @@ def get_config(runner,
         plot_transform = None
 
     class_config = ClassConfig(names=CLASS_NAMES, colors=CLASS_COLORS)
+
     # class_config.ensure_null_class()
 
     def make_scene(id) -> SceneConfig:
-        # id = id.replace('-', '_')
-        # raster_uri = f'{raw_uri}/4_Ortho_RGBIR/top_potsdam_{id}_RGBIR.tif'
-        # label_uri = f'{raw_uri}/5_Labels_for_participants/top_potsdam_{id}_label.tif'
 
         raster_uri = f'{raw_uri}/{id}.tif'
-        label_uri = f'{raw_uri}/{id}_labels.geojson'
+        label_uri = f'{raw_label_uri}/{id}_labels.geojson'
 
         if test:
             crop_uri = join(processed_uri, 'crops', basename(raster_uri))
@@ -191,19 +188,20 @@ def get_config(runner,
             window_opts=window_opts,
             img_sz=img_sz,
             img_channels=len(channel_order),
-            num_workers=0,
-            # channel_display_groups=channel_display_groups,
+            num_workers=NUM_WORKERS,
+            channel_display_groups=channel_display_groups,
             base_transform=base_transform,
             aug_transform=aug_transform,
             plot_options=PlotOptions(transform=plot_transform))
     else:
         data = SemanticSegmentationImageDataConfig(
             img_sz=img_sz,
-            num_workers=0,
-            # channel_display_groups=channel_display_groups,
+            num_workers=NUM_WORKERS,
+            channel_display_groups=channel_display_groups,
             base_transform=base_transform,
             aug_transform=aug_transform,
-            plot_options=PlotOptions(transform=plot_transform))
+            plot_options=PlotOptions(transform=plot_transform,
+                                     channel_display_groups=channel_display_groups))
 
     if external_model:
         model = SemanticSegmentationModelConfig(
@@ -225,7 +223,7 @@ def get_config(runner,
     backend = PyTorchSemanticSegmentationConfig(
         data=data,
         model=model,
-        solver=SolverConfig(lr=1e-4, num_epochs=15, batch_sz=8, one_cycle=True),
+        solver=SolverConfig(lr=1e-4, num_epochs=NUM_EPOCHS, batch_sz=8, one_cycle=True),
         log_tensorboard=True,
         run_tensorboard=False,
         test_mode=test)
@@ -234,7 +232,6 @@ def get_config(runner,
         root_uri=root_uri,
         dataset=scene_dataset,
         backend=backend,
-        # channel_display_groups=channel_display_groups,
         train_chip_sz=chip_sz,
         predict_chip_sz=chip_sz,
         chip_options=chip_options)

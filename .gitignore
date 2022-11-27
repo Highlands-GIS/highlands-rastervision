@@ -5,3 +5,5 @@ progress
 .DS_Store
 __pycache__
 .env
+labels
+train

@@ -14,8 +14,8 @@
 Once the labels have been created, train the model using the following docker command:
 ```shell
 docker run -t -i --rm \
-    -v ${PWD}/output:/opt/data/output \
-    -v ${PWD}/input:/opt/data/input \
+    --env-file .env \
+    -v ${PWD}/train:/opt/data/train \
     -v "${PWD}/src:/opt/src/rastervision_plugin" \
     quay.io/azavea/raster-vision:pytorch-0.13 rastervision run local /opt/src/rastervision_plugin/impervious_2020.py
 ```
@@ -49,7 +49,8 @@ docker run -t -i --rm \
 
 ### Run prediction (AWS)
 The AWS prediction is run on EC2 Spot instances and output prediction are written to an s3 bucket. 
-Once all grids have been processed, a seperate process is ran to aggregate all grids into a single geopackage. 
+This is a convenient way to run the prediction process since all targeted imagery is stored in an S3 bucket, eliminating the need to copy it locally. 
+Once all grids have been processed, a separate process is ran to aggregate all grids into a single geopackage. 
 See the /aws directory for how this is setup.  
 
 1. copy the required files to aws
@@ -69,9 +70,42 @@ See the /aws directory for how this is setup.
     ```shell
     sudo tail -f /var/log/cloud-init-output.log
     ```
-   If the process fails, the EC2 instance will automatically terminate. 
+   If the process fails, the EC2 instance will automatically terminate without incurring additional cost
 
-5. Check prediction progress by monitoring the object count in the target s3 path. There should be about **1900** objects when completed. 
+5. Check prediction progress by monitoring the object count in the target s3 path. There should be **1651** objects when completed. 
     ```shell
     aws s3 ls s3://njhighlands/geobia/impervious/2020/predicted/ | wc -l 
     ```
+
+6. Aggregate all results to a single geopackage
+   ```shell
+    aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/aggregate/spec.json
+   ```
+   This process should take roughly 20-30 minutes.
+
+7. After the above process is finished, you can copy the final compiled output (gzipped) to your local directory
+   ```shell
+   aws s3 cp s3://njhighlands/geobia/impervious/2020/predicted.gpkg.gz predicted.gpkg.gz
+   ```
+   
+
+labels:
+G4D7
+E6B11 -----x
+I3D16 -----x
+D7B4
+G3C3
+E7A5
+E7A2
+D7B12
+G2B12
+J3A8
+J3A9 -----X
+
+validation:
+H7B5 -----X
+I6A6 -----X
+
+problems:
+K4A1
+K4A5

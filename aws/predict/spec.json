@@ -1,10 +1,10 @@
 {
-    "ImageId": "ami-087c17d1fe0178315",
+    "ImageId": "ami-0b0dcb5067f052a63",
     "KeyName": "carto-concepts",
     "SecurityGroupIds": [
         "sg-04d29f074a492a629"
     ],
-    "InstanceType": "t3.large",
+    "InstanceType": "d3.4xlarge",
     "Placement": {
         "AvailabilityZone": "us-east-1a"
     },
@@ -16,12 +16,11 @@
             "DeviceName": "/dev/xvda",
             "Ebs": {
                 "DeleteOnTermination": true,
-                "SnapshotId": "snap-0699a041095ac5492",
                 "VolumeSize": 100,
                 "VolumeType": "gp3",
                 "Encrypted": false
             }
         }
     ],
-    "UserData": "IyEvYmluL2Jhc2gKCiMgaW5zdGFsbCBkb2NrZXIgZGVwcwpzdWRvIHl1bSB1cGRhdGUgLXkKc3VkbyB5dW0gaW5zdGFsbCAteSBkb2NrZXIKc3VkbyBzeXN0ZW1jdGwgc3RhcnQgZG9ja2VyCgpjZCAvaG9tZS9lYzItdXNlciB8fCBleGl0Cgphd3MgczMgY3AgczM6Ly9uamhpZ2hsYW5kcy9nZW9iaWEvaW1wZXJ2aW91cy8yMDIwL3NyYyAuL3NyYyAtLXJlY3Vyc2l2ZQoKIyAgdXNlIHRoZSAtLXJ1bnRpbWU9bnZpZGlhIGZsYWcgZm9yIHAtc2VyaWVzIChHUFUgZW5hYmxlZCkgZWMyIG1hY2hpbmVzCnN1ZG8gZG9ja2VyIHJ1biBcCiAgLWUgSU1BR0VfVVJJPSdzMzovL25qb2dpcy1pbWFnZXJ5LzIwMjAvY29nJyBcCiAgLWUgUzNCVUNLRVQ9J25qaGlnaGxhbmRzJyBcCiAgLWUgSU1BR0VfVVJJPSdzMzovL25qb2dpcy1pbWFnZXJ5LzIwMjAvY29nJyBcCiAgLWUgUFJFRElDVF9VUkk9J3MzOi8vbmpoaWdobGFuZHMvZ2VvYmlhL2ltcGVydmlvdXMvMjAyMC9wcmVkaWN0ZWQnIFwKICAtZSBNT0RFTF9VUkk9J3MzOi8vbmpoaWdobGFuZHMvZ2VvYmlhL2ltcGVydmlvdXMvMjAyMC9idW5kbGUvbW9kZWwtYnVuZGxlLnppcCcgXAogIC12ICIke1BXRH0vc3JjOi9vcHQvc3JjL3Jhc3RlcnZpc2lvbl9wbHVnaW4iIFwKICBxdWF5LmlvL2F6YXZlYS9yYXN0ZXItdmlzaW9uOnB5dG9yY2gtMC4xMyBweXRob24gL29wdC9zcmMvcmFzdGVydmlzaW9uX3BsdWdpbi9idWxrX3ByZWRpY3QucHkKCiMgc2h1dGRvd24gdGhlIGVjMiBvbiBjb21wbGV0aW9uCnN1ZG8gc2h1dGRvd24gbm93"
+    "UserData": "IyEvYmluL2Jhc2gKCiMgaW5zdGFsbCBkb2NrZXIgZGVwcwpzdWRvIHl1bSB1cGRhdGUgLXkKc3VkbyB5dW0gaW5zdGFsbCAteSBkb2NrZXIKc3VkbyBzeXN0ZW1jdGwgc3RhcnQgZG9ja2VyCgpjZCAvaG9tZS9lYzItdXNlciB8fCBleGl0Cgphd3MgczMgY3AgczM6Ly9uamhpZ2hsYW5kcy9nZW9iaWEvaW1wZXJ2aW91cy8yMDIwL3NyYyAuL3NyYyAtLXJlY3Vyc2l2ZQoKIyAgdXNlIHRoZSAtLXJ1bnRpbWU9bnZpZGlhIGZsYWcgZm9yIHAtc2VyaWVzIChHUFUgZW5hYmxlZCkgZWMyIGluc3RhbmNlCnN1ZG8gZG9ja2VyIHJ1biBcCiAgLS1pcGM9aG9zdCBcCiAgLWUgTlVNX0NPUkVTPTQgXAogIC1lIElNQUdFX1VSST0nczM6Ly9uam9naXMtaW1hZ2VyeS8yMDIwL2NvZycgXAogIC1lIFMzQlVDS0VUPSduamhpZ2hsYW5kcycgXAogIC1lIElNQUdFX1VSST0nczM6Ly9uam9naXMtaW1hZ2VyeS8yMDIwL2NvZycgXAogIC1lIFBSRURJQ1RfVVJJPSdzMzovL25qaGlnaGxhbmRzL2dlb2JpYS9pbXBlcnZpb3VzLzIwMjAvcHJlZGljdGVkJyBcCiAgLWUgTU9ERUxfVVJJPSdzMzovL25qaGlnaGxhbmRzL2dlb2JpYS9pbXBlcnZpb3VzLzIwMjAvdHJhaW4vYnVuZGxlL21vZGVsLWJ1bmRsZS56aXAnIFwKICAtdiAiJHtQV0R9L3NyYzovb3B0L3NyYy9yYXN0ZXJ2aXNpb25fcGx1Z2luIiBcCiAgcXVheS5pby9hemF2ZWEvcmFzdGVyLXZpc2lvbjpweXRvcmNoLTAuMTMgcHl0aG9uIC9vcHQvc3JjL3Jhc3RlcnZpc2lvbl9wbHVnaW4vYnVsa19wcmVkaWN0LnB5CgojIHNodXRkb3duIHRoZSBlYzIgb24gY29tcGxldGlvbgojc3VkbyBzaHV0ZG93biBub3c="
 }
