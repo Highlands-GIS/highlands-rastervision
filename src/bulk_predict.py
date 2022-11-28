@@ -2,7 +2,6 @@ import os
 import csv
 import tempfile
 import boto3
-import botocore
 
 import rastervision.pipeline  # unused but need for bug in RV
 from rastervision.core.predictor import Predictor
@@ -13,13 +12,7 @@ image_dir = os.getenv('IMAGE_URI')
 predict_dir = os.getenv('PREDICT_URI')
 bundle_dir = os.getenv('MODEL_URI')
 s3_bucket = os.getenv('S3BUCKET')
-manifest = 'manifest.csv'
-
-# break apart the manifest and split across 4 different ec2 instances
-# manifest = 'manifest_0.csv'
-# manifest = 'manifest_500.csv'
-# manifest = 'manifest_1000.csv'
-# manifest = 'manifest_1500.csv'
+manifest = os.getenv('MANIFEST')
 
 print('image_dir', image_dir)
 print('predict_dir', predict_dir)
