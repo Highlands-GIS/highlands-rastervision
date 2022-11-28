@@ -6,4 +6,4 @@ progress
 __pycache__
 .env
 labels
-train
+/train
