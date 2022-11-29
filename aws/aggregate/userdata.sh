@@ -26,7 +26,7 @@ aws s3 ls "${ROOT_PATH}/predicted/" | while read file; do
   sudo docker run -v "$(pwd)/data:/data" --name gdal --rm osgeo/gdal:alpine-small-latest ogr2ogr -f "PostgreSQL" PG:"host=${PG_CONTAINER_IP} dbname=postgres user=$PG_USER password=$PG_PASS" "/data/polygons.geojson" -nln predicted -append || continue
 done
 
-sudo docker run -v "$(pwd)/data:/data" --name gdal --rm osgeo/gdal:alpine-small-latest ogr2ogr -progress -f "GPKG" /data/predicted.gpkg PG:"host=${PG_CONTAINER_IP} dbname=postgres user=$PG_USER password=$PG_PASS" -nln predicted -sql "SELECT * FROM predicted"
+sudo docker run -v "$(pwd)/data:/data" --name gdal --rm osgeo/gdal:alpine-small-latest ogr2ogr -progress -f "GPKG" /data/predicted.gpkg PG:"host=${PG_CONTAINER_IP} dbname=postgres user=$PG_USER password=$PG_PASS" -skipfailures -nlt PROMOTE_TO_MULTI -nln predicted -sql "SELECT * FROM predicted"
 
 sudo chown ec2-user:ec2-user "$(pwd)/data"
 
