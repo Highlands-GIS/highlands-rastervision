@@ -3,10 +3,10 @@
 
 # install docker deps
 sudo yum update -y
-sudo yum install -y docker
+#sudo yum install -y docker
 sudo yum install -y git gcc sqlite-devel.x86_64
 sudo yum groupinstall -y "Development Tools"
-sudo systemctl start docker
+#sudo systemctl start docker
 
 # Install tippecanoe
 cd /tmp || exit
@@ -31,11 +31,13 @@ sudo docker run -v "$(pwd)/data:/data" --name gdal --rm osgeo/gdal:alpine-small-
 
 tippecanoe -o "$(pwd)/data/predicted.mbtiles" --force -zg --drop-densest-as-needed --extend-zooms-if-still-dropping --read-parallel -l impervious "$(pwd)/data/predicted.geojson"
 
+aws s3 cp "${ROOT_PATH}/predicted.mbtiles" "$(pwd)/data/predicted.mbtiles"
+
 # expand to tile directory
-tile-join --force -pk -pC -n impervious -e "$(pwd)/data/tiles"  "$(pwd)/data/predicted.mbtiles"
-tile-join --force -pk -pC -n NAD -e ./tiles tiles.mbtiles
+tile-join --force -pk -n impervious -e "$(pwd)/data/tiles"  "$(pwd)/data/predicted.mbtiles"
+
 # copy result to s3
-aws s3 sync "$(pwd)/data/tiles" "${ROOT_PATH}/tiles" --no-progress --only-show-errors
+aws s3 sync "$(pwd)/data/tiles" "${ROOT_PATH}/tiles" --no-progress --only-show-errors --content-encoding gzip
 
 # shutdown the ec2 on completion
 sudo shutdown now
