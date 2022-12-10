@@ -51,6 +51,7 @@ export default function Legend() {
   const handleLegendVisibility = () => {
     setLegendOpen(!legendOpen);
   };
+
   function zoomToLayer(layer) {
     const layerSource = map.getSource(layer.source)
     if (layerSource.type === 'geojson') {
@@ -106,10 +107,10 @@ export default function Legend() {
       <div className="legend-header" onClick={handleLegendVisibility}>{legendOpen ? <ExpandLess /> : <ExpandMore />}<Typography variant="h6" gutterBottom={0}>Legend</Typography> </div>
       <Collapse in={legendOpen} timeout="auto" unmountOnExit>
         {layers.length && Object.keys(checked).length ? layers.map((l, idx) =>
-          <div className="legendItem" key={idx}>
-            <span className="legendLabel" onClick={() => toggleLayerVisibility(l)}>
+          <div className='legend-row'><div className="legend-item" key={idx} onClick={() => toggleLayerVisibility(l)}>
+            <span className="legend-label">
               <Checkbox checked={checked[l.id]} readOnly type="checkbox" />
-              {getLegendSymbol(l)}{l.id}</span> <span className="zoom-in-layer-control">{getZoomIcon(l)}</span></div>
+              {getLegendSymbol(l)}{l.id}</span></div> <div className="zoom-in-layer-control">{getZoomIcon(l)}</div></div>
         ) : <LinearProgress />}
       </Collapse>
     </div>

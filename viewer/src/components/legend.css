@@ -11,7 +11,7 @@
     border: 1px solid #ffffff70;
 }
 
-.legendItem{
+.legend-item{
     margin:5px;
 }
 .legend-symbol{
@@ -19,9 +19,9 @@
     margin: 5px;
 }
 .zoom-in-layer-control{
-vertical-align: middle;
+    margin-top: 12px;
 }
-.legendLabel:hover{
+.legend-item:hover{
     cursor: pointer;
     background: #7c7c7cdb;
 }
@@ -29,4 +29,8 @@ vertical-align: middle;
 .legend-header{
     display: flex;
     cursor: pointer;
+}
+
+.legend-row{
+display: flex;
 }

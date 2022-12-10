@@ -13,9 +13,9 @@
   font-size: 22px;
   font-weight: bold;
   text-shadow:
-   -1px -1px 5px rgba(1, 96, 116, 1),  
-    1px -1px 5px rgba(1, 96, 116, 1),
-    -1px 1px 5px rgba(1, 96, 116, 1),
-     1px 1px 5px rgba(1, 96, 116, 1);
+   -1px -1px 5px rgb(0, 0, 0),  
+    1px -1px 5px rgb(0, 0, 0), 
+    -1px 1px 5px rgb(0, 0, 0), 
+     1px 1px 5px rgb(0, 0, 0);
   /* text-transform: uppercase; */
 }
