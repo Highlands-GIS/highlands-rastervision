@@ -1,0 +1,32 @@
+.legend {
+    position: absolute;
+    z-index: 100;
+    margin: 20px;
+    background: #3e3e3edb;
+    min-width: 200px;
+    color: #fff;
+    text-align: left;
+    padding: 10px;
+    top: 50px;
+    border: 1px solid #ffffff70;
+}
+
+.legendItem{
+    margin:5px;
+}
+.legend-symbol{
+    padding: 0 8px;
+    margin: 5px;
+}
+.zoom-in-layer-control{
+vertical-align: middle;
+}
+.legendLabel:hover{
+    cursor: pointer;
+    background: #7c7c7cdb;
+}
+
+.legend-header{
+    display: flex;
+    cursor: pointer;
+}
