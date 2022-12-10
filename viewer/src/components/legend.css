@@ -9,6 +9,8 @@
     padding: 10px;
     top: 50px;
     border: 1px solid #ffffff70;
+    max-height: -webkit-fill-available;
+    overflow-y: auto;
 }
 
 .legend-item{
