@@ -44,7 +44,6 @@ export default function Legend() {
     newChecked[id] = !checked.id
     setChecked({ ...checked, [id]: !checked[id] })
     const mapLayer = map.getLayer(id)
-
     map.setLayoutProperty(id, 'visibility', mapLayer.visibility === 'visible' ? "none" : 'visible');
   }
 
