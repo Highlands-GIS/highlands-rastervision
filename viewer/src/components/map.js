@@ -7,7 +7,7 @@ import { MapLibreContext } from '../context/MapLibreContext';
 
 import './map.css';
 
-const LABEL_IMAGES = ['G6A14', 'E7D1', 'F6B8', 'E6B11', 'I3D16', 'J3A9', 'H7B5', 'I6A6']
+const LABEL_IMAGES = ['G6A14', 'E7D1', 'F6B8', 'E6B11', 'I3D16', 'J3A9', 'H7B5', 'I6A6'].sort()
 
 // https://www.danieltrone.com/post/aws-vector-tiles-cloudfront/
 const mapStyle = {
