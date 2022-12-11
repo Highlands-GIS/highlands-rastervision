@@ -104,10 +104,10 @@ export default function Legend() {
 
   return (
     <div className="legend">
-      <div className="legend-header" onClick={handleLegendVisibility}>{legendOpen ? <ExpandLess /> : <ExpandMore />}<Typography variant="h6" gutterBottom={0}>Legend</Typography> </div>
+      <div className="legend-header" onClick={handleLegendVisibility}>{legendOpen ? <ExpandLess /> : <ExpandMore />}<Typography variant="h6">Legend</Typography> </div>
       <Collapse in={legendOpen} timeout="auto" unmountOnExit>
         {layers.length && Object.keys(checked).length ? layers.map((l, idx) =>
-          <div className='legend-row'><div className="legend-item" key={idx} onClick={() => toggleLayerVisibility(l)}>
+          <div className='legend-row' key={idx}><div className="legend-item" onClick={() => toggleLayerVisibility(l)}>
             <span className="legend-label">
               <Checkbox checked={checked[l.id]} readOnly type="checkbox" />
               {getLegendSymbol(l)}{l.id}</span></div> <div className="zoom-in-layer-control">{getZoomIcon(l)}</div></div>
