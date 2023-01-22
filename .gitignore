@@ -7,3 +7,12 @@ __pycache__
 .env
 labels
 /train
+viewer/node_modules
+viewer/build
+*.qmd
+cog
+dtm
+*.gz
+*.gpkg
+*.qgz
+*.log

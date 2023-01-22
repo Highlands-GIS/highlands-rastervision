@@ -32,6 +32,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
                 s3_key = predict_img_path.split(s3_bucket + "/")[1]
                 s3_response = s3_client.list_objects_v2(Bucket=s3_bucket, Prefix=f"{s3_key}/0-polygons.json")
                 if s3_response['KeyCount'] != 1:
+                    # https://docs.rastervision.io/en/0.20/api_reference/_generated/rastervision.core.predictor.Predictor.html#rastervision.core.predictor.Predictor.predict
                     predictor.predict([test_img_path], predict_img_path, vector_label_uri=predict_img_path)
                 else:
                     print(f'skipping {s3_key}, already exists')
