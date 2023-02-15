@@ -3,10 +3,10 @@
 
 # install docker deps
 sudo yum update -y
-#sudo yum install -y docker
+sudo yum install -y docker
 sudo yum install -y git gcc sqlite-devel.x86_64
 sudo yum groupinstall -y "Development Tools"
-#sudo systemctl start docker
+sudo systemctl start docker
 
 # Install tippecanoe
 cd /tmp || exit
@@ -15,7 +15,7 @@ cd tippecanoe || exit
 make -j
 sudo make install
 
-ROOT_PATH=s3://njhighlands/geobia/impervious/2020
+ROOT_PATH=s3://njhighlands/geobia/impervious/2015
 
 cd /home/ec2-user || exit
 
@@ -31,7 +31,7 @@ sudo docker run -v "$(pwd)/data:/data" --name gdal --rm osgeo/gdal:alpine-small-
 
 tippecanoe -o "$(pwd)/data/predicted.mbtiles" --force -zg --drop-densest-as-needed --extend-zooms-if-still-dropping --read-parallel -l impervious "$(pwd)/data/predicted.geojson"
 
-aws s3 cp "${ROOT_PATH}/predicted.mbtiles" "$(pwd)/data/predicted.mbtiles"
+aws s3 cp "$(pwd)/data/predicted.mbtiles" "${ROOT_PATH}/predicted.mbtiles"
 
 # expand to tile directory
 tile-join --force -pk -n impervious -e "$(pwd)/data/tiles"  "$(pwd)/data/predicted.mbtiles"

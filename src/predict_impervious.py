@@ -2,6 +2,7 @@ import os
 import csv
 import tempfile
 import boto3
+import random
 
 import rastervision.pipeline  # unused but need for bug in RV
 from rastervision.core.predictor import Predictor
@@ -23,17 +24,20 @@ print('manifest', manifest)
 with tempfile.TemporaryDirectory() as tmp_dir:
     predictor = Predictor(bundle_dir, tmp_dir)
     with open(f'/opt/src/rastervision_plugin/{manifest}') as file:
-        reader = csv.reader(file, delimiter=",")
+        lines = file.readlines()
+        # shuffling allows for distributed processing of all the images
+        random.shuffle(lines)
+        reader = csv.reader(lines, delimiter=",")
         for row in reader:
             try:
                 file_name = f"{row[0]}.tif"
                 test_img_path = os.path.join(image_dir, file_name)
                 predict_img_path = os.path.join(predict_dir, row[0])
                 s3_key = predict_img_path.split(s3_bucket + "/")[1]
-                s3_response = s3_client.list_objects_v2(Bucket=s3_bucket, Prefix=f"{s3_key}/0-polygons.json")
+                s3_response = s3_client.list_objects_v2(Bucket=s3_bucket, Prefix=f"{s3_key}/vector_output/polygons-0.json")
                 if s3_response['KeyCount'] != 1:
                     # https://docs.rastervision.io/en/0.20/api_reference/_generated/rastervision.core.predictor.Predictor.html#rastervision.core.predictor.Predictor.predict
-                    predictor.predict([test_img_path], predict_img_path, vector_label_uri=predict_img_path)
+                    predictor.predict([test_img_path], predict_img_path)
                 else:
                     print(f'skipping {s3_key}, already exists')
             except Exception as e:

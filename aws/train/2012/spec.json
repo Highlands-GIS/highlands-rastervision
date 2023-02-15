@@ -1,0 +1,24 @@
+{
+    "ImageId": "ami-087c17d1fe0178315",
+    "KeyName": "carto-concepts",
+    "SecurityGroupIds": [
+        "sg-04d29f074a492a629"
+    ],
+    "InstanceType": "c5.4xlarge",
+    "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::434872238534:instance-profile/ImperviousSurface"
+    },
+    "BlockDeviceMappings": [
+        {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+                "DeleteOnTermination": true,
+                "SnapshotId": "snap-0699a041095ac5492",
+                "VolumeSize": 100,
+                "VolumeType": "gp3",
+                "Encrypted": false
+            }
+        }
+    ],
+    "UserData": "IyEvYmluL2Jhc2gKCiMgaW5zdGFsbCBkb2NrZXIgZGVwcwpzdWRvIHl1bSB1cGRhdGUgLXkKc3VkbyB5dW0gaW5zdGFsbCAteSBkb2NrZXIKc3VkbyBzeXN0ZW1jdGwgc3RhcnQgZG9ja2VyCgpjZCAvaG9tZS9lYzItdXNlciB8fCBleGl0Cgphd3MgczMgY3AgczM6Ly9uamhpZ2hsYW5kcy9nZW9iaWEvaW1wZXJ2aW91cy9zcmMgLi9zcmMgLS1yZWN1cnNpdmUKYXdzIHMzIGNwIHMzOi8vbmpoaWdobGFuZHMvZ2VvYmlhL2ltcGVydmlvdXMvZW52cyAuL2VudnMgLS1yZWN1cnNpdmUKCiMgIHVzZSB0aGUgLS1ydW50aW1lPW52aWRpYSBmbGFnIGZvciBwLXNlcmllcyAoR1BVIGVuYWJsZWQpIGVjMiBpbnN0YW5jZQpkb2NrZXIgcnVuIFwKICAgIC0taXBjPWhvc3QgXAogICAgLWUgTlVNX0NPUkVTPTggXAogICAgLS1lbnYtZmlsZSAiJHtQV0R9L2VudnMvMjAxMi5lbnYiIFwKICAgIC12ICIke1BXRH0vc3JjOi9vcHQvc3JjL3Jhc3RlcnZpc2lvbl9wbHVnaW4iIFwKICAgIHF1YXkuaW8vYXphdmVhL3Jhc3Rlci12aXNpb246cHl0b3JjaC0wLjIwIHJhc3RlcnZpc2lvbiBydW4gbG9jYWwgL29wdC9zcmMvcmFzdGVydmlzaW9uX3BsdWdpbi9pbXBlcnZpb3VzLnB5IC0tc3BsaXRzIDgKCiMgc2h1dGRvd24gdGhlIGVjMiBvbiBjb21wbGV0aW9uCnN1ZG8gc2h1dGRvd24gbm93"
+}

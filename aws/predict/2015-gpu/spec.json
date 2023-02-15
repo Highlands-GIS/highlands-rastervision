@@ -1,0 +1,15 @@
+{
+    "ImageId": "ami-0c968d7ef8a4b0c34",
+    "KeyName": "carto-concepts",
+    "SecurityGroupIds": [
+        "sg-04d29f074a492a629"
+    ],
+    "InstanceType": "p3.2xlarge",
+    "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::434872238534:instance-profile/ImperviousSurface"
+    },
+    "Monitoring": {
+        "Enabled": true
+    },
+    "UserData": "IyEvYmluL2Jhc2gKCiMgaW5zdGFsbCBkb2NrZXIgZGVwcwpzdWRvIHl1bSB1cGRhdGUgLXkKc3VkbyB5dW0gaW5zdGFsbCAteSBkb2NrZXIKc3VkbyBzeXN0ZW1jdGwgc3RhcnQgZG9ja2VyCgpjZCAvbW50IHx8IGV4aXQKCmF3cyBzMyBjcCBzMzovL25qaGlnaGxhbmRzL2dlb2JpYS9pbXBlcnZpb3VzL3NyYyAuL3NyYyAtLXJlY3Vyc2l2ZQphd3MgczMgY3AgczM6Ly9uamhpZ2hsYW5kcy9nZW9iaWEvaW1wZXJ2aW91cy9lbnZzIC4vZW52cyAtLXJlY3Vyc2l2ZQoKc3VkbyBkb2NrZXIgcnVuIFwKICAtLXJ1bnRpbWU9bnZpZGlhIFwKICAtLWlwYz1ob3N0IFwKICAtZSBJTUFHRV9VUkk9J3MzOi8vbmpvZ2lzLWltYWdlcnkvMjAxNS9jb2cnIFwKICAtZSBTM0JVQ0tFVD0nbmpoaWdobGFuZHMnIFwKICAtZSBJTUFHRV9VUkk9J3MzOi8vbmpvZ2lzLWltYWdlcnkvMjAxNS9jb2cnIFwKICAtZSBQUkVESUNUX1VSST0nczM6Ly9uamhpZ2hsYW5kcy9nZW9iaWEvaW1wZXJ2aW91cy8yMDE1L3ByZWRpY3RlZCcgXAogIC1lIE1PREVMX1VSST0nczM6Ly9uamhpZ2hsYW5kcy9nZW9iaWEvaW1wZXJ2aW91cy8yMDE1L3RyYWluL2J1bmRsZS9tb2RlbC1idW5kbGUuemlwJyBcCiAgLWUgTUFOSUZFU1Q9J21hbmlmZXN0LmNzdicgXAogIC12ICIke1BXRH0vc3JjOi9vcHQvc3JjL3Jhc3RlcnZpc2lvbl9wbHVnaW4iIFwKICBxdWF5LmlvL2F6YXZlYS9yYXN0ZXItdmlzaW9uOnB5dG9yY2gtMC4yMCByYXN0ZXJ2aXNpb24gcnVuIGxvY2FsIC9vcHQvc3JjL3Jhc3RlcnZpc2lvbl9wbHVnaW4vcHJlZGljdF9hbGwucHkKCiMgc2h1dGRvd24gdGhlIGVjMiBvbiBjb21wbGV0aW9uCnN1ZG8gc2h1dGRvd24gbm93"
+}

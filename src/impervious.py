@@ -2,6 +2,9 @@
 from os.path import join, basename
 from os import getenv
 
+from rastervision.pipeline.file_system.file_system import NotReadableError
+from rastervision_pipeline.rastervision.pipeline.file_system.utils import file_to_str
+
 from rastervision.core.data.vector_source import (GeoJSONVectorSourceConfig)
 
 from rastervision.core.data.vector_transformer import ClassInferenceTransformerConfig
@@ -26,11 +29,9 @@ from rastervision.pytorch_learner import (
     SemanticSegmentationGeoDataConfig, GeoDataWindowConfig,
     GeoDataWindowMethod, PlotOptions)
 
-IMG_YEAR = getenv('IMG_YEAR')
-
-TRAIN_IDS = ['G6A14', 'E7D1', 'F6B8', 'E6B11', 'I3D16', 'J3A9']
-
-VAL_IDS = ['H7B5', 'I6A6']
+IMG_YEAR = getenv('YEAR')
+TRAIN_IDS = getenv('TRAIN_IDS').split(',')
+VAL_IDS = getenv('VAL_IDS').split(',')
 
 NUM_WORKERS = 8
 
@@ -50,6 +51,8 @@ CLASS_COLORS = [
 if not IMG_YEAR:
     raise Exception('No image year provided.')
 print('IMG_YEAR', IMG_YEAR)
+print('TRAIN_IDS', TRAIN_IDS)
+print('VAL_IDS', VAL_IDS)
 
 def get_config(runner,
                raw_uri: str = f's3://njogis-imagery/{IMG_YEAR}/cog',
@@ -57,7 +60,12 @@ def get_config(runner,
                processed_uri: str = f's3://njhighlands/geobia/impervious/{IMG_YEAR}/processed',
                root_uri: str = f's3://njhighlands/geobia/impervious/{IMG_YEAR}/train',
                test: bool = False):
-
+# def get_config(runner,
+#                raw_uri: str = f'/opt/data/cog/{IMG_YEAR}',
+#                raw_label_uri: str = f'/opt/data/labels/{IMG_YEAR}',
+#                processed_uri: str = f'/opt/data/processed/{IMG_YEAR}',
+#                root_uri: str = f'/opt/data/train/{IMG_YEAR}',
+#                test: bool = False):
     """Generate the pipeline config for this task. This function will be called
     by RV, with arguments from the command line, when this example is run.
 
@@ -96,6 +104,14 @@ def get_config(runner,
 
         raster_uri = f'{raw_uri}/{id}.tif'
         label_uri = f'{raw_label_uri}/{id}_labels.geojson'
+        aoi_uri =  [f'{raw_label_uri}/{id}_aoi.geojson']
+
+        try:
+            file_to_str(aoi_uri[0])
+            print(f'Using AOI {aoi_uri[0]}')
+        except NotReadableError as e:
+            aoi_uri = []
+            pass
 
         if test:
             crop_uri = join(processed_uri, 'crops', basename(raster_uri))
@@ -129,14 +145,14 @@ def get_config(runner,
         label_store = SemanticSegmentationLabelStoreConfig(
             rgb=True, vector_output=[PolygonVectorOutputConfig(class_id=0, denoise=3)])
 
-        scene = SceneConfig(
+        return SceneConfig(
             id=id,
             raster_source=raster_source,
             label_source=label_source,
-            label_store=label_store
+            label_store=label_store,
+            aoi_uris=aoi_uri
         )
 
-        return scene
 
     scene_dataset = DatasetConfig(
         class_config=class_config,

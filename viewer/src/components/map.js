@@ -1,13 +1,14 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, {useRef, useEffect, useState, useContext} from 'react';
 
 import maplibregl from 'maplibre-gl';
 import "maplibre-gl/dist/maplibre-gl.css";
 
-import { MapLibreContext } from '../context/MapLibreContext';
+import {MapLibreContext} from '../context/MapLibreContext';
 
 import './map.css';
-
-const LABEL_IMAGES = ['G6A14', 'E7D1', 'F6B8', 'E6B11', 'I3D16', 'J3A9', 'H7B5', 'I6A6'].sort()
+// J3A9,J3A8,I6A6,G6A14,E7D1,D6C12,E6B11,F6B8,I3D16,H7B5
+// const LABEL_IMAGES = ['G6A14', 'E7D1', 'F6B8', 'E6B11', 'I3D16', 'J3A9', 'H7B5', 'I6A6'].sort()
+// const LABEL_IMAGES = ['J3A9', 'J3A8', 'I6A6', 'G6A14', 'E7D1', 'D6C12', 'E6B11', 'F6B8', 'I3D16', 'H7B5'].sort()
 
 // https://www.danieltrone.com/post/aws-vector-tiles-cloudfront/
 const mapStyle = {
@@ -15,33 +16,125 @@ const mapStyle = {
     "sprite": "https://tiles.basemaps.cartocdn.com/gl/dark-matter-gl-style/sprite",
     "glyphs": "https://tiles.basemaps.cartocdn.com/fonts/{fontstack}/{range}.pbf",
     'sources': {
-        'imagery-2020-ir': {
+        // 'imagery-2020-ir': {
+        //     'type': 'raster',
+        //     'tiles': [
+        //         'https://img.nj.gov/imagerywms/2020?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&transparent=true&width=256&height=256&layers=2020',
+        //     ],
+        //     'tileSize': 256
+        // },
+        // 'imagery-2015-ir': {
+        //     'type': 'raster',
+        //     'tiles': [
+        //         'https://img.nj.gov/imagerywms/Infrared2015?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&transparent=true&width=256&height=256&layers=Infrared2015',
+        //     ],
+        //     'tileSize': 256
+        // },
+        'imagery-2012-ir': {
             'type': 'raster',
             'tiles': [
-                'https://img.nj.gov/imagerywms/Infrared2020?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&transparent=true&width=256&height=256&layers=Infrared2020',
+                'https://img.nj.gov/imagerywms/Infrared2012?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&transparent=true&width=256&height=256&layers=Infrared2012',
             ],
             'tileSize': 256
-        }
+        },
+        // 'imagery-2007-ir': {
+        //     'type': 'raster',
+        //     'tiles': [
+        //         'https://img.nj.gov/imagerywms/Infrared2007?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&transparent=true&width=256&height=256&layers=Infrared2007',
+        //     ],
+        //     'tileSize': 256
+        // },
+        // 'imagery-2002-ir': {
+        //     'type': 'raster',
+        //     'tiles': [
+        //         'https://img.nj.gov/imagerywms/Infrared2002?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&transparent=true&width=256&height=256&layers=Infrared2002',
+        //     ],
+        //     'tileSize': 256
+        // },
+
     },
     'layers': [
+        // {
+        //     'id': 'imagery-2020-ir',
+        //     'type': 'raster',
+        //     'source': 'imagery-2020-ir',
+        //     'minzoom': 0,
+        //     'maxzoom': 22,
+        //     layout: {
+        //         visibility: 'visible',
+        //     },
+        // },
+        // {
+        //     'id': 'imagery-2015-ir',
+        //     'type': 'raster',
+        //     'source': 'imagery-2015-ir',
+        //     'minzoom': 0,
+        //     'maxzoom': 22,
+        //     layout: {
+        //         visibility: 'none',
+        //     },
+        // },
         {
-            'id': 'imagery-2020-ir',
+            'id': 'imagery-2012-ir',
             'type': 'raster',
-            'source': 'imagery-2020-ir',
+            'source': 'imagery-2012-ir',
             'minzoom': 0,
             'maxzoom': 22,
             layout: {
                 visibility: 'visible',
             },
-
-        }
+        },
+        // {
+        //     'id': 'imagery-2007-ir',
+        //     'type': 'raster',
+        //     'source': 'imagery-2007-ir',
+        //     'minzoom': 0,
+        //     'maxzoom': 22,
+        //     layout: {
+        //         visibility: 'visible',
+        //     },
+        // },
+        // {
+        //     'id': 'imagery-2002-ir',
+        //     'type': 'raster',
+        //     'source': 'imagery-2002-ir',
+        //     'minzoom': 0,
+        //     'maxzoom': 22,
+        //     layout: {
+        //         visibility: 'none',
+        //     },
+        // }
     ]
 }
 
 
-const impervious2020Layers = [
+const imperviousLayers = [
+
+    // {
+    //     id: 'impervious-2015-line',
+    //     desc: 'Impervious 2015',
+    //     type: 'line',
+    //     minzoom: 15,
+    //     maxzoom: 20,
+    //     source: {
+    //         tiles: [
+    //             'https://njhighlands.s3.amazonaws.com/geobia/impervious/2015/tiles/{z}/{x}/{y}.pbf'
+    //         ],
+    //         type: 'vector',
+    //         minzoom: 15,
+    //         maxzoom: 20
+    //     },
+    //     'source-layer': 'impervious',
+    //     layout: {
+    //         visibility: 'visible',
+    //     },
+    //     paint: {
+    //         // 'fill-opacity': 0.25,
+    //         'line-color': 'rgb(255,242,0)',
+    //     }
+    // },
     {
-        id: 'impervious-fill',
+        id: 'impervious-2020-fill',
         desc: 'Impervious 2020',
         type: 'fill',
         minzoom: 0,
@@ -60,21 +153,21 @@ const impervious2020Layers = [
         },
         paint: {
             'fill-opacity': 0.25,
-            'fill-color': 'rgb(255,242,0)',
+            'fill-color': 'rgb(27,255,0)',
         }
     },
     {
-        id: 'impervious-line',
-        desc: 'Impervious 2020',
-        type: 'line',
-        minzoom: 15,
+        id: 'impervious-2015-fill',
+        desc: 'Impervious 2015',
+        type: 'fill',
+        minzoom: 0,
         maxzoom: 20,
         source: {
             tiles: [
-                'https://njhighlands.s3.amazonaws.com/geobia/impervious/2020/tiles/{z}/{x}/{y}.pbf'
+                'https://njhighlands.s3.amazonaws.com/geobia/impervious/2015/tiles/{z}/{x}/{y}.pbf'
             ],
             type: 'vector',
-            minzoom: 15,
+            minzoom: 0,
             maxzoom: 20
         },
         'source-layer': 'impervious',
@@ -82,8 +175,31 @@ const impervious2020Layers = [
             visibility: 'visible',
         },
         paint: {
-            // 'fill-opacity': 0.25,
-            'line-color': 'rgb(255,242,0)',
+            'fill-opacity': 0.25,
+            'fill-color': 'rgb(255,242,0)',
+        }
+    },
+        {
+        id: 'impervious-2012-fill',
+        desc: 'Impervious 2012',
+        type: 'fill',
+        minzoom: 0,
+        maxzoom: 20,
+        source: {
+            tiles: [
+                'https://njhighlands.s3.amazonaws.com/geobia/impervious/2012/tiles/{z}/{x}/{y}.pbf'
+            ],
+            type: 'vector',
+            minzoom: 0,
+            maxzoom: 20
+        },
+        'source-layer': 'impervious',
+        layout: {
+            visibility: 'visible',
+        },
+        paint: {
+            'fill-opacity': 0.25,
+            'fill-color': 'rgb(0,215,255)',
         }
     }
 ]
@@ -93,14 +209,14 @@ const gridLayer = "https://njhighlands.s3.amazonaws.com/geobia/impervious/2020/s
 
 export default function Map() {
     const mapContainer = useRef(null);
-    const { map, setMap } = useContext(MapLibreContext);
+    const {map, setMap} = useContext(MapLibreContext);
     const [lng] = useState(-74.6344);
     const [lat] = useState(40.8473);
     const [zoom] = useState(8.88);
 
 
     useEffect(() => {
-        const initializeMap = ({ setMap, mapContainer }) => {
+        const initializeMap = ({setMap, mapContainer}) => {
             const newMap = new maplibregl.Map({
                 container: mapContainer.current,
                 style: mapStyle,
@@ -149,35 +265,35 @@ export default function Map() {
                     }
                 });
 
-                impervious2020Layers.forEach(layer => {
+                imperviousLayers.forEach(layer => {
                     newMap.addLayer(layer)
                 })
 
-                LABEL_IMAGES.forEach((label => {
-                    const labelId = `${label}_labels`
-                    newMap.addSource(labelId, {
-                        type: 'geojson',
-                        data: `https://njhighlands.s3.amazonaws.com/geobia/impervious/2020/labels/${labelId}.geojson`
-                    });
-
-                    newMap.addLayer({
-                        id: labelId,
-                        type: 'fill',
-                        source: labelId,
-                        paint: {
-                            'fill-color': '#00e9ff',
-                        },
-                        layout: {
-                            visibility: 'visible',
-                        }
-                    });
-                }))
+                // LABEL_IMAGES.forEach((label => {
+                //     const labelId = `${label}_labels`
+                //     newMap.addSource(labelId, {
+                //         type: 'geojson',
+                //         data: `https://njhighlands.s3.amazonaws.com/geobia/impervious/2015/labels/${labelId}.geojson`
+                //     });
+                //
+                //     newMap.addLayer({
+                //         id: labelId,
+                //         type: 'fill',
+                //         source: labelId,
+                //         paint: {
+                //             'fill-color': '#00e9ff',
+                //         },
+                //         layout: {
+                //             visibility: 'visible',
+                //         }
+                //     });
+                // }))
                 newMap.resize();
                 setMap(newMap);
             });
 
         };
-        if (!map) initializeMap({ setMap, mapContainer });
+        if (!map) initializeMap({setMap, mapContainer});
         else {
             // Clean up on unmount
             return () => map.remove();
@@ -186,7 +302,7 @@ export default function Map() {
 
     return (
         <div className="map-wrap">
-            <div ref={mapContainer} className="map" />
+            <div ref={mapContainer} className="map"/>
         </div>
     );
 }

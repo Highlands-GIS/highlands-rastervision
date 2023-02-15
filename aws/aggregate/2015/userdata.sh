@@ -10,7 +10,7 @@ cd /home/ec2-user || exit
 sudo mkdir "data"
 
 BUCKET=njhighlands
-ROOT_PATH=s3://${BUCKET}/geobia/impervious/2020
+ROOT_PATH=s3://${BUCKET}/geobia/impervious/2015
 PG_USER='postgres'
 PG_PASS='password'
 
@@ -22,7 +22,7 @@ PG_CONTAINER_IP=$(sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}
 aws s3 ls "${ROOT_PATH}/predicted/" | while read file; do
   items=($file)
   target=${items[1]}
-  aws s3 cp "${ROOT_PATH}/predicted/${target}0-polygons.json" ./data/polygons.geojson || continue
+  aws s3 cp "${ROOT_PATH}/predicted/${target}vector_output/polygons-0.json" ./data/polygons.geojson || continue
   sudo docker run -v "$(pwd)/data:/data" --name gdal --rm osgeo/gdal:alpine-small-latest ogr2ogr -f "PostgreSQL" PG:"host=${PG_CONTAINER_IP} dbname=postgres user=$PG_USER password=$PG_PASS" "/data/polygons.geojson" -nln predicted -append || continue
 done
 
