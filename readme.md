@@ -6,8 +6,8 @@ The below processes are deployed to AWS EC2 Spot Instances and data written to a
 ## Getting Started
 ### 0. Label the Images
 1. Create labels and validation scenes from target sets of imagery. For each image, the label file must match the name of the grid id. 
-2. You can optionally identify an Area of Interest for each image with the naming convenction <grid_id>_aoi.geojson. 
-3. Once labels have been created for the image, save to the ./labels directory with the following naming convention: *<GRID-ID>_labels.geojson*. 
+2. You can optionally identify an Area of Interest for each image with the naming convention <grid_id>_aoi.geojson. 
+3. Once labels have been created for the image, save to the ./labels/<year> directory with the following naming convention: *<GRID-ID>_labels.geojson*. 
 4. The grid id should then be added into the associated env file's `TRAIN_IDS` or `VAL_IDS` sections. 
 
 ### 1. Train the Model
@@ -58,11 +58,11 @@ sudo tail -f /var/log/cloud-init-output.log
 
 Check prediction progress by monitoring the object count in the target s3 path. There should be **1651** objects for each year when completed. 
 ```shell
-   aws s3 ls s3://njhighlands/geobia/impervious/2020/predicted/ | wc -l 
-   aws s3 ls s3://njhighlands/geobia/impervious/2015/predicted/ | wc -l 
-   aws s3 ls s3://njhighlands/geobia/impervious/2012/predicted/ | wc -l 
-   aws s3 ls s3://njhighlands/geobia/impervious/2007/predicted/ | wc -l 
-   aws s3 ls s3://njhighlands/geobia/impervious/2002/predicted/ | wc -l 
+aws s3 ls s3://njhighlands/geobia/impervious/2020/predicted/ | wc -l 
+aws s3 ls s3://njhighlands/geobia/impervious/2015/predicted/ | wc -l 
+aws s3 ls s3://njhighlands/geobia/impervious/2012/predicted/ | wc -l 
+aws s3 ls s3://njhighlands/geobia/impervious/2007/predicted/ | wc -l 
+aws s3 ls s3://njhighlands/geobia/impervious/2002/predicted/ | wc -l 
 ```
 
 ### 3. Aggregate Predictions into a Single Geopackage
