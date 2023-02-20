@@ -1,5 +1,6 @@
 #!/bin/bash
-#set -e
+
+IMG_YEAR=2012
 
 # install docker deps
 sudo yum update -y
@@ -10,7 +11,7 @@ cd /home/ec2-user || exit
 sudo mkdir "data"
 
 BUCKET=njhighlands
-ROOT_PATH=s3://${BUCKET}/geobia/impervious/2015
+ROOT_PATH=s3://${BUCKET}/geobia/impervious/${IMG_YEAR}
 PG_USER='postgres'
 PG_PASS='password'
 

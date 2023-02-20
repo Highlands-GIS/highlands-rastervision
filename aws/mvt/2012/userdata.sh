@@ -1,5 +1,6 @@
 #!/bin/bash
-#set -e
+
+IMG_YEAR=2012
 
 # install docker deps
 sudo yum update -y
@@ -15,7 +16,7 @@ cd tippecanoe || exit
 make -j
 sudo make install
 
-ROOT_PATH=s3://njhighlands/geobia/impervious/2012
+ROOT_PATH=s3://njhighlands/geobia/impervious/${IMG_YEAR}
 
 cd /home/ec2-user || exit
 
