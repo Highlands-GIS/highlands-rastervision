@@ -1,111 +1,110 @@
-
 # Highlands Rastervision
 4 band semantic segmentation using [RasterVision](https://rastervision.io/) ([pdf](https://buildmedia.readthedocs.org/media/pdf/raster-vision/latest/raster-vision.pdf)). 
 
+The below processes are deployed to AWS EC2 Spot Instances and data written to an S3 bucket. The [EC2 Spot Instance Advisor](https://aws.amazon.com/ec2/spot/instance-advisor/) should be used to verify selected instance has a low Frequency of Interruption.
+
 ## Getting Started
-### Prepare data
-1. Create labels and validation scenes from target sets of imagery. To obtain a new image for digitizing labels, see the `scripts/download_sample_images.sh` script. 
+### 0. Label the Images
+1. Create labels and validation scenes from target sets of imagery. For each image, the label file must match the name of the grid id. 
+2. You can optionally identify an Area of Interest for each image with the naming convenction <grid_id>_aoi.geojson. 
+3. Once labels have been created for the image, save to the ./labels directory with the following naming convention: *<GRID-ID>_labels.geojson*. 
+4. The grid id should then be added into the associated env file's `TRAIN_IDS` or `VAL_IDS` sections. 
 
-2. Once labels have been created for the image, save to the ./labels directory with the following naming convention: *<GRID-ID>_labels.geojson*. 
-
-3. The grid id should then be added into the `TRAIN_IDS` or `VAL_IDS` list in **impervious_2020.py**.
-
-### Train the Model
-Once the labels have been created, train the model using the following docker command:
+### 1. Train the Model
+Once the labels have been created, train the model using the following command(s) for running in AWS:
 ```shell
-docker run -t -i --rm \
-    --env-file .env \
-    -v ${PWD}/train:/opt/data/train \
-    -v "${PWD}/src:/opt/src/rastervision_plugin" \
-    quay.io/azavea/raster-vision:pytorch-0.13 rastervision run local /opt/src/rastervision_plugin/impervious_2020.py
+# edit the shell script if desired in aws/train/<year>/userdata.sh, then encode the script as base64:
+openssl base64 -A -in ./aws/train/2020/userdata.sh -out ./aws/train/2020/userdata.txt
+openssl base64 -A -in ./aws/train/2015/userdata.sh -out ./aws/train/2015/userdata.txt
+openssl base64 -A -in ./aws/train/2012/userdata.sh -out ./aws/train/2012/userdata.txt
+openssl base64 -A -in ./aws/train/2007/userdata.sh -out ./aws/train/2007/userdata.txt
+openssl base64 -A -in ./aws/train/2002/userdata.sh -out ./aws/train/2002/userdata.txt
+
+# copy the contents of the output text file to the associated spec.json file's "userdata" property, then launch an EC2 instance to do the training
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/train/2020/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/train/2015/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/train/2012/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/train/2007/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/train/2002/spec.json
+
+# connect to the EC2 and monitor the process with 
+sudo tail -f /var/log/cloud-init-output.log
 ```
-to retrain from scratch, delete the contents of the /output directory and re-run the above command. 
+You can continue to train a model for additional `epochs` by increasing this value in the **src/impervious.py* file if desired.
+To retrain from scratch, delete the contents of the **train** directory and re-run the above command. 
 
-### Run prediction (local)
+### 2. Run Predictions
 
+Predictions are run in AWS on EC2 Spot instances with the output vectorized results written to a s3 bucket. 
 ```shell
-# singleton
-docker run -t -i --rm \
-    -v ${PWD}/output:/opt/data/output \
-    -v ${PWD}/input:/opt/data/input \
-    -v "${PWD}/src:/opt/src/rastervision_plugin" \
-    quay.io/azavea/raster-vision:pytorch-0.13 \
-    rastervision predict /opt/data/output/bundle/model-bundle.zip /opt/data/input/G6A15.tif /opt/data/output/predict/G6A15
+# edit the shell script if desired in aws/predict/<year>/userdata.sh, then encode the script as base64:
+openssl base64 -A -in ./aws/predict/2020/userdata.sh -out ./aws/predict/2020/userdata.txt
+openssl base64 -A -in ./aws/predict/2015/userdata.sh -out ./aws/predict/2015/userdata.txt
+openssl base64 -A -in ./aws/predict/2012/userdata.sh -out ./aws/predict/2012/userdata.txt
+openssl base64 -A -in ./aws/predict/2007/userdata.sh -out ./aws/predict/2007/userdata.txt
+openssl base64 -A -in ./aws/predict/2002/userdata.sh -out ./aws/predict/2002/userdata.txt
+
+# copy the contents of the output text file to the associated spec.json file's "userdata" property, then launch an EC2 instance(s) to do the prediction 
+# notice this instance count is set higher, this can be scaled to whatever number is desirable for quick processing. 
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "one-time" --launch-specification file://aws/predict/2020/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "one-time" --launch-specification file://aws/predict/2015/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "one-time" --launch-specification file://aws/predict/2012/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "one-time" --launch-specification file://aws/predict/2007/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "one-time" --launch-specification file://aws/predict/2002/spec.json
+
+# connect to the EC2 and monitor the process with 
+sudo tail -f /var/log/cloud-init-output.log
 ```
 
+Check prediction progress by monitoring the object count in the target s3 path. There should be **1651** objects for each year when completed. 
 ```shell
-# bulk prediction based off the `manifest.csv` 
-docker run -t -i --rm \
-  --env-file .env \
-  -e IMAGE_URI='s3://njogis-imagery/2020/cog' \
-  -e S3BUCKET='njhighlands' \
-  -e IMAGE_URI='s3://njogis-imagery/2020/cog' \
-  -e PREDICT_URI='s3://njhighlands/geobia/impervious/2020/predicted' \
-  -e MODEL_URI='s3://njhighlands/geobia/impervious/2020/bundle/model-bundle.zip' \
-  -v "${PWD}/src:/opt/src/rastervision_plugin" \
-  quay.io/azavea/raster-vision:pytorch-0.13 python /opt/src/rastervision_plugin/bulk_predict.py
+   aws s3 ls s3://njhighlands/geobia/impervious/2020/predicted/ | wc -l 
+   aws s3 ls s3://njhighlands/geobia/impervious/2015/predicted/ | wc -l 
+   aws s3 ls s3://njhighlands/geobia/impervious/2012/predicted/ | wc -l 
+   aws s3 ls s3://njhighlands/geobia/impervious/2007/predicted/ | wc -l 
+   aws s3 ls s3://njhighlands/geobia/impervious/2002/predicted/ | wc -l 
 ```
 
-
-### Run prediction (AWS)
-The AWS prediction is run on EC2 Spot instances and output prediction are written to an s3 bucket. 
-This is a convenient way to run the prediction process since all targeted imagery is stored in an S3 bucket, eliminating the need to copy it locally. 
-Once all grids have been processed, a separate process is ran to aggregate all grids into a single geopackage. 
-See the /aws directory for how this is setup.  
-
-1. copy the required files to aws
-    ```shell
-    sh scripts/sync_src_to_s3.sh
-    sh scripts/sync_model_to_s3.sh
-    ```
-2. Encode the userdata scripts (one time only, then again on any changes)
-    ```shell
-    openssl base64 -A -in ./aws/predict/userdata.sh -out ./aws/predict/userdata.txt
-    ```
-3. Request the EC2 spot
-    ```shell
-    aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/predict/spec.json
-    ```
-4. You can then SSH into the ec2 and verify the process is running correctly with the below command. 
-    ```shell
-    sudo tail -f /var/log/cloud-init-output.log
-    ```
-   If the process fails, the EC2 instance will automatically terminate without incurring additional cost
-
-5. Check prediction progress by monitoring the object count in the target s3 path. There should be **1651** objects when completed. 
-    ```shell
-    aws s3 ls s3://njhighlands/geobia/impervious/2020/predicted/ | wc -l 
-    ```
-
-6. Aggregate all results to a single geopackage
+### 3. Aggregate Predictions into a Single Geopackage
+This process should take roughly 30-60 minutes.
    ```shell
-    aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/aggregate/spec.json
-   ```
-   This process should take roughly 20-30 minutes.
+# encode the userdata scripts
+openssl base64 -A -in ./aws/aggregate/2020/userdata.sh -out ./aws/aggregate/2020/userdata.txt
+openssl base64 -A -in ./aws/aggregate/2015/userdata.sh -out ./aws/aggregate/2015/userdata.txt
+openssl base64 -A -in ./aws/aggregate/2012/userdata.sh -out ./aws/aggregate/2012/userdata.txt
+openssl base64 -A -in ./aws/aggregate/2007/userdata.sh -out ./aws/aggregate/2007/userdata.txt
+openssl base64 -A -in ./aws/aggregate/2002/userdata.sh -out ./aws/aggregate/2002/userdata.txt
 
-7. After the above process is finished, you can copy the final compiled output (gzipped) to your local directory
+# copy the contents of the output text file to the associated spec.json file's "userdata" property, then launch an EC2 instance(s) to do the aggregation 
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/aggregate/2020/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/aggregate/2015/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/aggregate/2012/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/aggregate/2007/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/aggregate/2002/spec.json
+```
+
+After the above process is finished, you can copy the final compiled output (gzipped) to your local directory
    ```shell
    aws s3 cp s3://njhighlands/geobia/impervious/2020/predicted.gpkg.gz predicted.gpkg.gz
+   aws s3 cp s3://njhighlands/geobia/impervious/2015/predicted.gpkg.gz predicted.gpkg.gz
+   aws s3 cp s3://njhighlands/geobia/impervious/2012/predicted.gpkg.gz predicted.gpkg.gz
+   aws s3 cp s3://njhighlands/geobia/impervious/2007/predicted.gpkg.gz predicted.gpkg.gz
+   aws s3 cp s3://njhighlands/geobia/impervious/2002/predicted.gpkg.gz predicted.gpkg.gz
    ```
    
+### 4. Create Vector Tiles (Optional)
+```shell
+# encode the userdata scripts
+openssl base64 -A -in ./aws/mvt/2020/userdata.sh -out ./aws/mvt/2020/userdata.txt
+openssl base64 -A -in ./aws/mvt/2015/userdata.sh -out ./aws/mvt/2015/userdata.txt
+openssl base64 -A -in ./aws/mvt/2012/userdata.sh -out ./aws/mvt/2012/userdata.txt
+openssl base64 -A -in ./aws/mvt/2007/userdata.sh -out ./aws/mvt/2007/userdata.txt
+openssl base64 -A -in ./aws/mvt/2002/userdata.sh -out ./aws/mvt/2002/userdata.txt
 
-labels:
-G4D7
-E6B11 -----x
-I3D16 -----x
-D7B4
-G3C3
-E7A5
-E7A2
-D7B12
-G2B12
-J3A8
-J3A9 -----X
-
-validation:
-H7B5 -----X
-I6A6 -----X
-
-problems:
-K4A1
-K4A5
+# copy the contents of the output text file to the associated spec.json file's "userdata" property, then launch an EC2 instance(s) to do the aggregation 
+aws ec2 request-spot-instances --spot-price "0.4" --instance-count 1 --type "one-time" --launch-specification file://aws/mvt/2020/spec.json
+aws ec2 request-spot-instances --spot-price "0.4" --instance-count 1 --type "one-time" --launch-specification file://aws/mvt/2015/spec.json
+aws ec2 request-spot-instances --spot-price "0.4" --instance-count 1 --type "one-time" --launch-specification file://aws/mvt/2012/spec.json
+aws ec2 request-spot-instances --spot-price "0.4" --instance-count 1 --type "one-time" --launch-specification file://aws/mvt/2007/spec.json
+aws ec2 request-spot-instances --spot-price "0.4" --instance-count 1 --type "one-time" --launch-specification file://aws/mvt/2002/spec.json
+```
