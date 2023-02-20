@@ -19,6 +19,7 @@ sudo docker run \
   -e MODEL_URI="s3://njhighlands/geobia/impervious/${IMG_YEAR}/train/bundle/model-bundle.zip" \
   -e MANIFEST='manifest.csv' \
   -v "${PWD}/src:/opt/src/rastervision_plugin" \
+  -v "${PWD}/tmp:/opt/data/tmp" \
   quay.io/azavea/raster-vision:pytorch-0.20 rastervision run local /opt/src/rastervision_plugin/predict_impervious.py
 
 # shutdown the ec2 on completion
