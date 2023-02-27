@@ -22,6 +22,21 @@ export default function Legend() {
   const [layers, setLayers] = useState([])
   const [checked, setChecked] = useState({})
   const [legendOpen, setLegendOpen] = React.useState(true);
+  const [predictEval, setpredictEval] = React.useState({})
+
+
+  function fetchF1Score(year) {
+    fetch(`https://njhighlands.s3.amazonaws.com/geobia/impervious/${year}/train/eval/validation_scenes/eval.json`)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          const metrics = result.overall.filter(item => item.class_name === "impervious")[0]['metrics']
+          setpredictEval({ ...predictEval, [year]: metrics })
+        },
+        (error) => {
+        }
+      )
+  }
 
   useEffect(() => {
     if (map && layers.length === 0 && Object.keys(checked).length === 0) {
@@ -29,7 +44,8 @@ export default function Legend() {
       const layers = map.getStyle().layers
       const newChecked = {}
       layers.forEach(element => {
-        newChecked[element.id] = true
+        newChecked[element.id] = element.layout.visibility === 'visible'
+        fetchF1Score(element.id.split("-")[1])
       });
       setLayers(layers)
       setChecked(newChecked)
@@ -94,9 +110,13 @@ export default function Legend() {
     return <span className="legend-symbol" style={style}>{iconSymbol}</span>
   }
 
-  function getZoomIcon(l) {
-    if (l.id.toLowerCase().includes('labels')) {
-      return <Tooltip title="zoom to layer" placement="right"><IconButton onClick={() => zoomToLayer(l)} style={{ padding: 0 }}><ZoomInIcon style={{ color: 'white' }} /></IconButton></Tooltip>
+  function getTooltip(l) {
+    const year = l.id.split("-")[1]
+    // console.log('predictData', year, predictEval)
+    if (year && predictEval[year]) {
+      const predictData = predictEval[year]
+      // console.log('predictData', predictData)
+      // return <Tooltip title="zoom to layer" placement="right"> <IconButton>Arrow</IconButton></Tooltip>
     }
     return null
   }
@@ -109,7 +129,7 @@ export default function Legend() {
           <div className='legend-row' key={idx}><div className="legend-item" onClick={() => toggleLayerVisibility(l)}>
             <span className="legend-label">
               <Checkbox checked={checked[l.id]} readOnly type="checkbox" />
-              {getLegendSymbol(l)}{l.id}</span></div> <div className="zoom-in-layer-control">{getZoomIcon(l)}</div></div>
+              {getLegendSymbol(l)}{l.id}</span></div> <div className="zoom-in-layer-control">{getTooltip(l)}</div></div>
         ) : <LinearProgress />}
       </Collapse>
     </div>
