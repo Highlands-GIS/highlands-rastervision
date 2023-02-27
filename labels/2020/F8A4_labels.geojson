@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "F8A4_labels",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -74.803297223328414, 40.602740575629561 ], [ -74.803281177986804, 40.602686424050702 ], [ -74.803191147873122, 40.602708931804429 ], [ -74.803212478085911, 40.602767083871854 ], [ -74.803297223328414, 40.602740575629561 ] ] ] } }
+]
+}
