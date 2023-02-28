@@ -14,7 +14,7 @@ aws s3 cp s3://njhighlands/geobia/impervious/src ./src --recursive
 sudo docker run \
   --ipc=host \
   -e S3BUCKET='njhighlands' \
-  -e IMAGE_URI="s3://njogis-imagery/${IMG_YEAR}/cog" \
+  -e IMAGE_URI="s3://njhighlands/imagery/${IMG_YEAR}/cog" \
   -e PREDICT_URI="s3://njhighlands/geobia/impervious/${IMG_YEAR}/predicted" \
   -e MODEL_URI="s3://njhighlands/geobia/impervious/${IMG_YEAR}/train/bundle/model-bundle.zip" \
   -e MANIFEST='manifest.csv' \

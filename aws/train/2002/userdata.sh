@@ -18,7 +18,7 @@ docker run \
     -e NUM_CORES=8 \
     --env-file "${PWD}/envs/${IMG_YEAR}.env" \
     -v "${PWD}/src:/opt/src/rastervision_plugin" \
-    quay.io/azavea/raster-vision:pytorch-0.20 rastervision run local /opt/src/rastervision_plugin/impervious.py --splits 8
+    quay.io/azavea/raster-vision:pytorch-0.20 rastervision run local /opt/src/rastervision_plugin/impervious.py -a raw_uri s3://njhighlands/imagery/2002/cog
 
 # shutdown the ec2 on completion
 sudo shutdown now
