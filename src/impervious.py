@@ -16,7 +16,7 @@ from rastervision.core.rv_pipeline import (
     SemanticSegmentationWindowMethod, SemanticSegmentationConfig)
 
 from rastervision.core.data import (
-    ClassConfig, RasterioSourceConfig, MultiRasterSourceConfig,
+    ClassConfig, RasterioSourceConfig,
     SemanticSegmentationLabelSourceConfig,
     SemanticSegmentationLabelStoreConfig, PolygonVectorOutputConfig,
     RGBClassTransformerConfig, RasterizedSourceConfig, RasterizerConfig)
@@ -94,9 +94,15 @@ def get_config(runner,
         train_ids = train_ids[:2]
         val_ids = val_ids[:2]
 
-    # use all 4 channels
-    channel_order = [0, 1, 2, 3]
-    channel_display_groups = {'RGB': (0, 1, 2), 'IR': (3,)}
+    # 2002 is not 4 band IR imagery, only use the 3 bands in this case.
+    if str(IMG_YEAR) == '2002':
+        print('bypassing IR channel')
+        channel_order = [0, 1, 2]
+        channel_display_groups = None
+    else:
+        # use all 4 channels
+        channel_order = [0, 1, 2, 3]
+        channel_display_groups = {'RGB': (0, 1, 2), 'IR': (3,)}
 
     class_config = ClassConfig(names=CLASS_NAMES, colors=CLASS_COLORS)
 
