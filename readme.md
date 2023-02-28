@@ -108,3 +108,17 @@ aws ec2 request-spot-instances --spot-price "0.4" --instance-count 1 --type "one
 aws ec2 request-spot-instances --spot-price "0.4" --instance-count 1 --type "one-time" --launch-specification file://aws/mvt/2007/spec.json
 aws ec2 request-spot-instances --spot-price "0.4" --instance-count 1 --type "one-time" --launch-specification file://aws/mvt/2002/spec.json
 ```
+
+## Special Cases 
+### 2002 imagery
+The 2002 imagery is missing a spatial reference. This pre-processing step assigns the projection before running the training and prediction steps. 
+```shell
+# encode the userdata scripts
+openssl base64 -A -in ./aws/project/2002/userdata.sh -out ./aws/project/2002/userdata.txt
+
+# copy the contents of the output text file to the associated spec.json file's "userdata" property, then launch an EC2 instance(s) to do the projection assignment
+aws ec2 request-spot-instances --spot-price "0.4" --instance-count 1 --type "one-time" --launch-specification file://aws/project/2002/spec.json
+
+# confirm 1651 images are present 
+aws s3 ls s3://njhighlands/imagery/2002/cog/ | wc -l 
+```
