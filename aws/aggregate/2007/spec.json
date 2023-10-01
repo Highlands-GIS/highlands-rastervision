@@ -4,7 +4,7 @@
     "SecurityGroupIds": [
         "sg-0e5756c6225d6a945"
     ],
-    "InstanceType": "c5d.large",
+    "InstanceType": "t2.xlarge",
     "Placement": {
         "AvailabilityZone": "us-east-1a"
     },
