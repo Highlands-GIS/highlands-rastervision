@@ -2,7 +2,7 @@
     "ImageId": "ami-087c17d1fe0178315",
     "KeyName": "carto-concepts",
     "SecurityGroupIds": [
-        "sg-04d29f074a492a629"
+        "sg-0e5756c6225d6a945"
     ],
     "InstanceType": "c5d.large",
     "Placement": {

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMG_YEAR=2012
+IMG_YEAR=2015
 
 # install docker deps
 sudo yum update -y

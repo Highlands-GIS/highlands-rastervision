@@ -20,7 +20,7 @@ do
   aws s3 cp "${filename}_updated.tif" "${TARGET_URL}/${filename}.tif"
   sudo rm "${filename}_updated.tif"
   sudo rm "${filename}.tif"
-done < src/manifest.csv
+done < src/manifest-diff.csv
 
 # shutdown the ec2 on completion
 sudo shutdown now

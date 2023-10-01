@@ -22,7 +22,7 @@ openssl base64 -A -in ./aws/train/2002/userdata.sh -out ./aws/train/2002/userdat
 
 # copy the contents of the output text file to the associated spec.json file's "userdata" property, then launch an EC2 instance to do the training
 aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/train/2020/spec.json
-aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/train/2015/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "one-time" --launch-specification file://aws/train/2015/spec.json
 aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/train/2012/spec.json
 aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/train/2007/spec.json
 aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/train/2002/spec.json
@@ -50,7 +50,7 @@ aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "on
 aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "one-time" --launch-specification file://aws/predict/2015/spec.json
 aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "one-time" --launch-specification file://aws/predict/2012/spec.json
 aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "one-time" --launch-specification file://aws/predict/2007/spec.json
-aws ec2 request-spot-instances --spot-price "0.8" --instance-count 10 --type "one-time" --launch-specification file://aws/predict/2002/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 20 --type "one-time" --launch-specification file://aws/predict/2002/spec.json
 
 # connect to the EC2 and monitor the process with 
 sudo tail -f /var/log/cloud-init-output.log
@@ -85,11 +85,11 @@ aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one
 
 After the above process is finished, you can copy the final compiled output (gzipped) to your local directory
    ```shell
-   aws s3 cp s3://njhighlands/geobia/impervious/2020/predicted.gpkg.gz predicted.gpkg.gz
-   aws s3 cp s3://njhighlands/geobia/impervious/2015/predicted.gpkg.gz predicted.gpkg.gz
-   aws s3 cp s3://njhighlands/geobia/impervious/2012/predicted.gpkg.gz predicted.gpkg.gz
-   aws s3 cp s3://njhighlands/geobia/impervious/2007/predicted.gpkg.gz predicted.gpkg.gz
-   aws s3 cp s3://njhighlands/geobia/impervious/2002/predicted.gpkg.gz predicted.gpkg.gz
+   aws s3 cp s3://njhighlands/geobia/impervious/2020/predicted.gpkg.gz predicted-2020.gpkg.gz
+   aws s3 cp s3://njhighlands/geobia/impervious/2015/predicted.gpkg.gz predicted-2015.gpkg.gz
+   aws s3 cp s3://njhighlands/geobia/impervious/2012/predicted.gpkg.gz predicted-2012.gpkg.gz
+   aws s3 cp s3://njhighlands/geobia/impervious/2007/predicted.gpkg.gz predicted-2007.gpkg.gz
+   aws s3 cp s3://njhighlands/geobia/impervious/2002/predicted.gpkg.gz predicted-2002.gpkg.gz
    ```
    
 ### 4. Create Vector Tiles (Optional)
@@ -117,7 +117,7 @@ The 2002 imagery is missing a spatial reference. This pre-processing step assign
 openssl base64 -A -in ./aws/project/2002/userdata.sh -out ./aws/project/2002/userdata.txt
 
 # copy the contents of the output text file to the associated spec.json file's "userdata" property, then launch an EC2 instance(s) to do the projection assignment
-aws ec2 request-spot-instances --spot-price "0.4" --instance-count 1 --type "one-time" --launch-specification file://aws/project/2002/spec.json
+aws ec2 request-spot-instances --spot-price "0.8" --instance-count 1 --type "one-time" --launch-specification file://aws/project/2002/spec.json
 
 # confirm 1651 images are present 
 aws s3 ls s3://njhighlands/imagery/2002/cog/ | wc -l 
