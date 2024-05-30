@@ -12,6 +12,8 @@ These steps are deployed to AWS via EC2 Spot Instances with generated data writt
 Other AWS services may be more ideal to run Rastervision (S3 Batch & SageMaker for example), but this process proved cost and time effective. 
 
 ## Getting Started
+You will need an AWS Account, Python and the AWS-CLI installed locally. 
+
 ### 0. Label the Images
 1. Create labels and validation scenes from target sets of imagery. For each image, the label file must match the name of the grid id. 
 2. You can optionally identify an Area of Interest for each image with the naming convention <grid_id>_aoi.geojson. 
