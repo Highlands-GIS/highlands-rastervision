@@ -1,7 +1,15 @@
 # Highlands Rastervision
-4 band semantic segmentation using [RasterVision](https://rastervision.io/) ([pdf](https://buildmedia.readthedocs.org/media/pdf/raster-vision/latest/raster-vision.pdf)). 
+![Screenshot Preview](screenshot.png "Screenshot Preview")
+4 band semantic segmentation using [RasterVision](https://rastervision.io/) ([pdf](https://buildmedia.readthedocs.org/media/pdf/raster-vision/latest/raster-vision.pdf)) to detect Impervious Surfaces in the Highlands Region. 
 
-The below processes are deployed to AWS EC2 Spot Instances and data written to an S3 bucket. The [EC2 Spot Instance Advisor](https://aws.amazon.com/ec2/spot/instance-advisor/) should be used to verify selected instance has a low Frequency of Interruption.
+## Overview
+Highlands-Rastervision adheres to [Cloud Native GeoSpatial Processing](https://cloudnativegeo.org/about/) thanks in part to [NJGIN](https://njgin.nj.gov/njgin/) hosting its aerial imagery in a [Cloud Optimized GeoTiff format via S3](https://registry.opendata.aws/nj-imagery/). 
+
+### Process
+![Overview Diagram](diagram.png "Overview Diagram")
+These steps are deployed to AWS via EC2 Spot Instances with generated data written to an S3 bucket. The [EC2 Spot Instance Advisor](https://aws.amazon.com/ec2/spot/instance-advisor/) should be used to verify selected instance has a low Frequency of Interruption.
+
+Other AWS services may be more ideal to run Rastervision (S3 Batch & SageMaker for example), but this process proved cost and time effective. 
 
 ## Getting Started
 ### 0. Label the Images
