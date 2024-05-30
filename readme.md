@@ -1,6 +1,10 @@
 # Highlands Rastervision
+![Screenshot Preview](screenshot.png "Screenshot Preview")
 4 band semantic segmentation using [RasterVision](https://rastervision.io/) ([pdf](https://buildmedia.readthedocs.org/media/pdf/raster-vision/latest/raster-vision.pdf)). 
 
+## Overview
+Highlands-Rastervision adheres to [Cloud Native GeoSpatial Processing](https://cloudnativegeo.org/about/) thanks in part to [NJGIN](https://njgin.nj.gov/njgin/) hosting its aerial imagery in a [Cloud Optimized GeoTiff format via S3](https://registry.opendata.aws/nj-imagery/). 
+![Overview Diagram](diagram.png "Overview Diagram")
 The below processes are deployed to AWS EC2 Spot Instances and data written to an S3 bucket. The [EC2 Spot Instance Advisor](https://aws.amazon.com/ec2/spot/instance-advisor/) should be used to verify selected instance has a low Frequency of Interruption.
 
 ## Getting Started
