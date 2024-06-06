@@ -2,6 +2,8 @@
 ![Screenshot Preview](screenshot.png "Screenshot Preview")
 4 band semantic segmentation using [RasterVision](https://rastervision.io/) ([pdf](https://buildmedia.readthedocs.org/media/pdf/raster-vision/latest/raster-vision.pdf)) to detect Impervious Surfaces in the Highlands Region. 
 
+An example output is the [2020 Impervious Surface of the NJ Highlands Region:](https://highlands-data-njhighlands.opendata.arcgis.com/datasets/b5d2762b553643a6b02e2a9258ba1a93_1/explore).
+
 ## Overview
 Highlands-Rastervision adheres to [Cloud Native GeoSpatial Processing](https://cloudnativegeo.org/about/) thanks in part to [NJGIN](https://njgin.nj.gov/njgin/) hosting its aerial imagery in a [Cloud Optimized GeoTiff format via S3](https://registry.opendata.aws/nj-imagery/). 
 
